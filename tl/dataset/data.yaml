@@ -1,0 +1,5 @@
+train: /home2/icns/aigo/tl_train/images
+val: /home2/icns/aigo/tl_train/images
+
+nc: 2
+names: ['green_light', 'red_light']

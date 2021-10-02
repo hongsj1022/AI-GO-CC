@@ -90,72 +90,68 @@ def tl_training():
 
     logger.info("Start re-training trafficlight detection model.")
 
-    remote_path = "/home/aigo/detect/trafficlight"
+    os.system("unzip tl_train/images/images.zip -d /home2/icns/aigo/tl_train/images/")
+    logger.info("Finish to unzip received tl_images.")
+    os.system("rm /home2/icns/aigo/tl_train/images/images.zip")
 
-    '''
-    tl training code
-    '''
+    os.system("unzip tl_train/labels/labels.zip -d /home2/icns/aigo/tl_train/labels/")
+    logger.info("Finish to unzip received tl_labels.")
+    os.system("rm /home2/icns/aigo/tl_train/labels/labels.zip")
+
+    remote_path = "/home/aigo/detect/trafficlight"
+    
+    # tl training
+    os.system("python3 /home2/icns/aigo/tl/train.py")
 
     remote_file = remote_path + "/test4best.pt"
-    local_file = "/home2/icns/aigo/tl_train/testest.py" # + model
+    local_file = "/home2/icns/aigo/tl_train/test4best.pt"
     ssh_manager.send_file(local_file, remote_path)
     ssh_manager.get_file(remote_file, local_file)
+    logger.info("Success updated tl_model transmission.")
+    os.system("rm /home2/icns/aigo/tl_train/images/*")
+    os.system("rm /home2/icns/aigo/tl_train/labels/*")
+    logger.info("Images and Labels removed.")
 
     return "TrafficLight Detection model has been updated!"
 
-@app.route('/cw_training', methods = ['GET','POST'])
-def cw_training():
-
-    logger.info("Start re-training crosswalk detection model.")
-
-    remote_path = "/home/aigo/detect/crosswalk/"
-
-    '''
-    cw training code
-    '''
-
-    remote_file = remote_path + "cr_best.pt"
-    local_file = "/home2/icns/aigo/cw_train/" # + model
-    ssh_manager.send_file(local_file, remote_path)
-    ssh_manager.get_file(remote_file, local_file)
-
-    return "Crosswalk Detection model has been updated!"
 
 @app.route('/car_training', methods = ['GET','POST'])
 def car_training():
 
-    logger.info("Start re-training car detection model.")
+    logger.info("Start re-training car detection and distance estimation model.")
 
-    remote_path = "/home/aigo/detect/car/weights/"
+    os.system("unzip car_train/images/images.zipi -d /home2/icns/aigo/car_train/images/")
+    logger.info("Finish to unzip received car_images.")
+    os.system("rm /home2/icns/aigo/car_train/images/images.zip")
 
-    '''
-    car training code
-    '''
+    os.system("unzip car_train/labels/labels.zip -d /home2/icns/aigo/car_train/labels/")
+    logger.info("Finish to unzip received car_labels.")
+    os.system("rm /home2/icns/aigo/car_train/labels/labels.zip")
 
-    remote_file = remote_path + "tiny1_8000.pth"
-    local_file = "/home2/icns/aigo/car_train/" # + model
-    ssh_manager.send_file(local_file, remote_path)
-    ssh_manager.get_file(remote_file, local_file)
+    remote_path = "/home/aigo/detect/car/weights"
+    
+    # car detection training
+    os.system("python3 /home2/icns/aigo/car/train_detection.py"))
 
-    return "Car Detection model has been updated!"
+    time.sleep(1)
 
-@app.route('/car_distance_training', methods = ['GET','POST'])
-def car_dist_training():
+    # distance training
+    os.system("python3 /home2/icns/aigo/car/train_distance.py"))
 
-    logger.info("Start re-training car distance detection model.")
+    remote_file_car = remote_path + "/tiny1_8000.pth"
+    remote_file_dist = remote_path + "/distance_model.pth"
+    local_file_car = "/home2/icns/aigo/car_train/tiny1_8000.pth")
+    local_file_dist = "/home2/icns/aigo/car_train/distance_model.pth")
+    ssh_manager.send_file(local_file_car, remote_path)
+    ssh_manager.send_file(local_file_dist, remote_path)
+    ssh_manager.get_file(remote_file_car, local_file_car)
+    ssh_manager.get_file(remote_file_dist, local_file_car)
+    logger.info("Success updated car_model transmission.")
+    os.system("rm /home2/icns/aigo/car_train/images/*")
+    os.system("rm /home2/icns/aigo/car_train/labels/*")
+    logger.info("Images and Labels removed.")
 
-    remote_path = "/home/aigo/detect/car/weights/"
-
-    '''
-    car distance training code
-    '''
-
-    remote_file = remote_path + "distance_model.pth"
-    local_file = "/home2/icns/aigo/car_dist_train/" # + model
-    ssh_manager.send_file(local_file, remote_path)
-    ssh_manager.get_file(remote_file, local_file)
-
-    return "Car Distance Detection model has been updated!"
+    return "Car Detection model and Distance Estimation model have been updated!"
 
 
 if __name__ == "__main__":
