@@ -131,17 +131,17 @@ def car_training():
     remote_path = "/home/aigo/detect/car/weights"
     
     # car detection training
-    os.system("python3 /home2/icns/aigo/car/train_detection.py"))
+    os.system("python3 /home2/icns/aigo/car/train_detection.py")
 
     time.sleep(1)
 
     # distance training
-    os.system("python3 /home2/icns/aigo/car/train_distance.py"))
+    os.system("python3 /home2/icns/aigo/car/train_distance.py")
 
     remote_file_car = remote_path + "/tiny1_8000.pth"
     remote_file_dist = remote_path + "/distance_model.pth"
-    local_file_car = "/home2/icns/aigo/car_train/tiny1_8000.pth")
-    local_file_dist = "/home2/icns/aigo/car_train/distance_model.pth")
+    local_file_car = "/home2/icns/aigo/car_train/tiny1_8000.pth"
+    local_file_dist = "/home2/icns/aigo/car_train/distance_model.pth"
     ssh_manager.send_file(local_file_car, remote_path)
     ssh_manager.send_file(local_file_dist, remote_path)
     ssh_manager.get_file(remote_file_car, local_file_car)
